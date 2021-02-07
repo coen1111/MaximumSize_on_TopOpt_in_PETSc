@@ -1,7 +1,7 @@
 // Import necessary stuff
-#include <iostream>
-#include <MPIIO.h>
-#include <cstdlib> // To get the exit function
+#include "iostream"
+#include "MPIIO.h"
+#include "cstdlib" // To get the exit function
 
 /* -----------------------------------------------------------------------------
 Authors: Niels Aage, Erik Andreassen, Boyan Lazarov, August 2013 
