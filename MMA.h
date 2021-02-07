@@ -1,7 +1,7 @@
 #ifndef __MMA__
 #define __MMA__
 
-#include <petsc.h>
+#include "petsc.h"
 
 class MMA{
 	public:
