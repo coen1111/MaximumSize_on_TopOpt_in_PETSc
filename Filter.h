@@ -1,13 +1,13 @@
 #ifndef __FILTER__
 #define __FILTER__
 
-#include <petsc.h>
+#include "petsc.h"
 //#include <petsc-private/dmdaimpl.h>
-#include <petsc/private/dmdaimpl.h>
-#include <iostream>
-#include <math.h>
-#include <PDEFilter.h>
-#include <TopOpt.h>
+#include "petsc/private/dmdaimpl.h"
+#include "iostream"
+#include "math.h"
+#include "PDEFilter.h"
+#include "TopOpt.h"
 
 /* -----------------------------------------------------------------------------
 Authors: Niels Aage, Erik Andreassen, Boyan Lazarov, August 2013 
