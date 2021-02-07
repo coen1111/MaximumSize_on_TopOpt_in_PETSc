@@ -1,10 +1,10 @@
-PETSC_DIR=/home/eduardo/PETSC/3.7.4
-PETSC_ARCH=linux-dbg
+PETSC_DIR=/home/pi/petsc
+PETSC_ARCH=arch-linux-c-debug
 CFLAGS = -I.
 FFLAGS=
 CPPFLAGS=-I.
 FPPFLAGS=
-LOCDIR=
+LOCDIR='pwd'
 EXAMPLESC=
 EXAMPLESF=
 MANSEC=
