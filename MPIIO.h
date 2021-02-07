@@ -2,12 +2,12 @@
 #define MPIIO_H
 
 // Include necessary libraries
-#include <petsc.h>
+#include "petsc.h"
 //#include <petsc-private/dmdaimpl.h>
-#include <petscdmda.h>
-#include <string>
-#include <mpi.h>
-#include <TopOpt.h>
+#include "petscdmda.h"
+#include "string"
+#include "mpi.h"
+#include "TopOpt.h"
 
 /* -----------------------------------------------------------------------------
 Authors: Niels Aage, Erik Andreassen, Boyan Lazarov, August 2013 
