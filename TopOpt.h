@@ -1,14 +1,14 @@
 #ifndef TOPOPT_H
 #define TOPOPT_H
 
-#include <petsc.h>
+#include "petsc.h"
 //#include <petsc-private/dmdaimpl.h>
-#include <petsc/private/dmdaimpl.h>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <math.h>
-#include <MMA.h>
+#include "petsc/private/dmdaimpl.h"
+#include "iostream"
+#include "fstream"
+#include "sstream"
+#include "math.h"
+#include "MMA.h"
 
 /*
  Authors: Niels Aage, Erik Andreassen, Boyan Lazarov, August 2013
