@@ -1,7 +1,7 @@
 #ifndef PDE_FILTER_H
 #define PDE_FILTER_H
-#include <TopOpt.h>
-#include <petsc.h>
+#include "TopOpt.h"
+#include "petsc.h"
 
 /* -----------------------------------------------------------------------------
 Authors: Niels Aage, Erik Andreassen, Boyan Lazarov, August 2013 
