@@ -55,6 +55,9 @@ indicated in Filter.cc (line 322).
 
 See requirements and instructions at https://github.com/topopt/TopOpt_in_PETSc
 
+- To compile, edit the first to lines in the makefile
+- 1. PETSC_DIR=~/Documents/petsc
+- 2. PETSC_ARCH=arch-linux-c-debug
 - To compile, e.g: make topopt
 - To execute, e.g: mpiexec -np 6 ./topopt
 - Visualize using ParaView.
