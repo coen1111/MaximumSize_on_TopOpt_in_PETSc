@@ -57,7 +57,7 @@ Python 2.7 needed for configuring PETSc makefile
 
 Compile PETSc 3.7.4 in a path `XXXXXXX/petsc-3.7.4`
  1. `cd XXXXXXX`
- 2. `wget https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-3.7.4.tar.gz'
+ 2. `wget https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-3.7.4.tar.gz`
  3. `tar -xf petsc-3.7.4.tar.gz`
  4. `cd petsc-3.7.4`
  5. `wget https://www.mcs.anl.gov/petsc/mirror/externalpackages/fblaslapack-3.4.2.tar.gz`
