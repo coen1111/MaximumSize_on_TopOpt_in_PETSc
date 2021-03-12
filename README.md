@@ -55,22 +55,23 @@ indicated in Filter.cc (line 322).
 Python 2.7 needed for configuring PETSc makefile
  - 'apt get install python2'
 
-Compile PETSc 3.7.4 in a path `XXXXXXX`
- 1. `wget https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-3.7.4.tar.gz'
- 2. `tar -xf petsc-3.7.4.tar.gz -C XXXXXXX`
- 3. `cd XXXXXXX`
- 4. `wget https://www.mcs.anl.gov/petsc/mirror/externalpackages/fblaslapack-3.4.2.tar.gz`
- 5. `python2.7 ./configure --with-cc=gcc --with-cxx=g++ --with-fc=gfortran --download-mpich --download-fblaslapack=fblaslapack-3.4.2.tar.gz`
- 7. This will configure the make file, an folder in the path `XXXXXXX` will appear with which is called `arch-YYYYYYY`. Fill this architecture in the next command.
- 8. `make PETSC_DIR=XXXXXXX PETSC_ARCH=arch-YYYYYYY all`
- 9. `make PETSC_DIR=XXXXXXX PETSC_ARCH=arch-YYYYYYY test`
+Compile PETSc 3.7.4 in a path `XXXXXXX/petsc-3.7.4`
+ 1. `cd XXXXXXX`
+ 2. `wget https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-3.7.4.tar.gz'
+ 3. `tar -xf petsc-3.7.4.tar.gz`
+ 4. `cd petsc-3.7.4`
+ 5. `wget https://www.mcs.anl.gov/petsc/mirror/externalpackages/fblaslapack-3.4.2.tar.gz`
+ 6. `python2.7 ./configure --with-cc=gcc --with-cxx=g++ --with-fc=gfortran --download-mpich --download-fblaslapack=fblaslapack-3.4.2.tar.gz`
+ 7. This will configure the make file, an folder in the path `XXXXXXX/petsc-3.7.4` will appear with which is called `arch-YYYYYYY`. Fill this architecture in the next command.
+ 8. `make PETSC_DIR=XXXXXXX/petsc-3.7.4 PETSC_ARCH=arch-YYYYYYY all`
+ 9. `make PETSC_DIR=XXXXXXX/petsc-3.7.4 PETSC_ARCH=arch-YYYYYYY test`
 
 ## Compilation and Execution
 
 See requirements and instructions at https://github.com/topopt/TopOpt_in_PETSc
 
-- To compile, edit the first to lines in the makefile
-- 1. `PETSC_DIR=XXXXXXX`
+- To compile, edit the first two lines in the makefile
+- 1. `PETSC_DIR=XXXXXXX/petsc-3.7.4`
 - 2. `PETSC_ARCH=arch-YYYYYYY`
 - To compile, e.g: make topopt
 - To execute, e.g: mpiexec -np 6 ./topopt
