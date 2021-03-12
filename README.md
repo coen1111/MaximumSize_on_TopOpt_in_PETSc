@@ -74,7 +74,7 @@ See requirements and instructions at https://github.com/topopt/TopOpt_in_PETSc
 - 1. `PETSC_DIR=XXXXXXX/petsc-3.7.4`
 - 2. `PETSC_ARCH=arch-YYYYYYY`
 - To compile, e.g: make topopt
-- To execute, e.g: mpiexec -np 6 ./topopt
+- To execute, e.g: XXXXXXX/arch-YYYYYYY/bin/mpiexec -np 4 ./topopt
 - Visualize using ParaView.
 
 > **NOTE**: The code works with **PETSc version 3.7.4**
