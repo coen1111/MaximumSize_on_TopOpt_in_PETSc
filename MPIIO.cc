@@ -307,14 +307,14 @@ void MPIIO::Allocate(std::string info, const int nDom, const int nPFields[],
 			header[1+i] += nPoints[i*ncpu + j];
 			header[1+nDom+i] += nCells[i*ncpu + j]; 
 		}
-		PetscPrintf(MPI_COMM_WORLD,"nPointsT[i=%d] is written header[1+%d] = %s \n",i.cstr(), i.cstr(),mPointsT[i].c_str());
+		PetscPrintf(MPI_COMM_WORLD,"nPointsT[i=%d] is written header[1+i = %d] = %s \n",i.cstr(), (1+i).cstr(),mPointsT[i].c_str());
 		nPointsT[i] = header[1+i];
-		PetscPrintf(MPI_COMM_WORLD,"nCellsT[i=%d] is written header[1+%d] = %s \n",i.cstr(), i.cstr(),nCellsT[i].c_str());
+		PetscPrintf(MPI_COMM_WORLD,"nCellsT[i=%d] is written header[1+i+nDom = %d] = %s \n",i.cstr(), (1+i+nDom).cstr(),nCellsT[i].c_str());
 		nCellsT[i]  = header[1+nDom+i];
 		// And then the number of point/cell fields in each domain
-		PetscPrintf(MPI_COMM_WORLD,"nPFields[i=%d] is written header[1+2*nDom+1=%d] = %s \n",i.cstr(), (1+2*nDom+i).cstr(),nPFields[i].c_str());
+		PetscPrintf(MPI_COMM_WORLD,"nPFields[i=%d] is written header[1+i+2*nDom=%d] = %s \n",i.cstr(), (1+i+2*nDom).cstr(),nPFields[i].c_str());
 		header[1+2*nDom+i] = nPFields[i];
-		PetscPrintf(MPI_COMM_WORLD,"nCFields[i=%d] is written header[1+3*nDom+1=%d] = %s \n",i.cstr(), (1+3*nDom+i).cstr(),nCFields[i].c_str());
+		PetscPrintf(MPI_COMM_WORLD,"nCFields[i=%d] is written header[1+i+3*nDom=%d] = %s \n",i.cstr(), (1+i+3*nDom).cstr(),nCFields[i].c_str());
 		header[1+3*nDom+i] = nCFields[i];
 		this->nPFields[i] = nPFields[i];
 		this->nCFields[i] = nCFields[i];
