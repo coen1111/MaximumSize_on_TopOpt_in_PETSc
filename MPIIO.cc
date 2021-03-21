@@ -105,8 +105,8 @@ MPIIO::MPIIO(DM da_nodes, int nPf, std::string pnames,int nCf, std::string cname
 		// Create the offset
 		if (nen == 8){ // Hex element
 			CellOffset+=nen;
-                        cellsOffset0[i] = CellOffset; // (in vtk hex element type is 12)
-                } 
+            cellsOffset0[i] = CellOffset; // (in vtk hex element type is 12)
+        } 
 		// Finally, in case we have varying elements size, make sure the extra nodes
 		// are put to zero
 		// REMARK: This is only an example, and is never used in this implementation
@@ -297,8 +297,8 @@ void MPIIO::Allocate(std::string info, const int nDom, const int nPFields[],
 	headerLen = 2+4*nDom; 
 	unsigned long int* header = new unsigned long int[headerLen];
 	// Put the number of domains into the buffer
-	PetscPrintf(MPI_COMM_WORLD,"nDom is written header[0] = %s \n",header[0].c_str());
 	header[0] = nDom;
+	// PetscPrintf(MPI_COMM_WORLD,"nDom is written header[0] = %d \n", header[0]);
 	for (int i=0; i<nDom ; i++){
 		// Sum up total number of points and cells in the domain
 		header[1+i] = 0;
@@ -307,20 +307,26 @@ void MPIIO::Allocate(std::string info, const int nDom, const int nPFields[],
 			header[1+i] += nPoints[i*ncpu + j];
 			header[1+nDom+i] += nCells[i*ncpu + j]; 
 		}
-		PetscPrintf(MPI_COMM_WORLD,"nPointsT[i=%d] is written header[1+i = %d] = %s \n",i.cstr(), (1+i).cstr(),mPointsT[i].c_str());
 		nPointsT[i] = header[1+i];
-		PetscPrintf(MPI_COMM_WORLD,"nCellsT[i=%d] is written header[1+i+nDom = %d] = %s \n",i.cstr(), (1+i+nDom).cstr(),nCellsT[i].c_str());
+		// PetscPrintf(MPI_COMM_WORLD,"nPointsT[i=%d] is written header[1+i = %d] = %d \n", i, (1+i), nPointsT[i]);
+
 		nCellsT[i]  = header[1+nDom+i];
+		// PetscPrintf(MPI_COMM_WORLD,"nCellsT[i=%d] is written header[1+i+nDom = %d] = %d \n", i, (1+i+nDom), nCellsT[i]);
+
 		// And then the number of point/cell fields in each domain
-		PetscPrintf(MPI_COMM_WORLD,"nPFields[i=%d] is written header[1+i+2*nDom=%d] = %s \n",i.cstr(), (1+i+2*nDom).cstr(),nPFields[i].c_str());
 		header[1+2*nDom+i] = nPFields[i];
-		PetscPrintf(MPI_COMM_WORLD,"nCFields[i=%d] is written header[1+i+3*nDom=%d] = %s \n",i.cstr(), (1+i+3*nDom).cstr(),nCFields[i].c_str());
+		// PetscPrintf(MPI_COMM_WORLD,"nPFields[i=%d] is written header[1+i+2*nDom=%d] = %d \n", i, (1+i+2*nDom), nPFields[i]);
+
 		header[1+3*nDom+i] = nCFields[i];
+		// PetscPrintf(MPI_COMM_WORLD,"nCFields[i=%d] is written header[1+i+3*nDom=%d] = %d \n", i, (1+i+3*nDom), nCFields[i]);
+
 		this->nPFields[i] = nPFields[i];
 		this->nCFields[i] = nCFields[i];
 	}	
 	// Last entry is the nodes per element
 	header[headerLen-1] = nodesPerElement;
+	// PetscPrintf(MPI_COMM_WORLD,"nodesPerElement is written header[headerLen-1=%d] = %d \n", (headerLen-1), nodesPerElement);
+
 	// Save the number of characters to output
 	int numberOfCharacters = info.size() + pFNames.size() + cFNames.size() + 4;
 	// The first processor outputs total number of points, cells, and fields

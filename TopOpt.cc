@@ -112,9 +112,9 @@ PetscErrorCode TopOpt::SetUp(){
 	PetscErrorCode ierr;
   
 	// SET DEFAULTS for FE mesh and levels for MG solver
-        nxyz[0] = 144+1;
-        nxyz[1] = 24+1;
-        nxyz[2] = 48+1;
+        nxyz[0] = 8+1;
+        nxyz[1] = 8+1;
+        nxyz[2] = 8+1;
         xc[0]   = 0.0;
         xc[1]   = 3.0;
         xc[2]   = 0.0;
@@ -127,7 +127,7 @@ PetscErrorCode TopOpt::SetUp(){
 	// SET DEFAULTS for optimization problems
 	volfrac= 0.25       ;  // Volume fraction on Dilated (it's scaled on the main file)
 	volfracREF= volfrac ;  // Volume fraction in Intermediate
-	maxItr = 449        ;  // Maximum number of iterations (check IterProj above: 40*9=360)
+	maxItr = 2          ;  // Maximum number of iterations (check IterProj above: 40*9=360)
 	rmin   = (3.0/(144.0)*1.01)*2.0 ; // Filter radius (it is not the minimum size radius)
 	Emin   = 1.0e-6     ; // 
 	Emax   = 1.0        ;

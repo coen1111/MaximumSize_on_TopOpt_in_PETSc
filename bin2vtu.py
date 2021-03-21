@@ -95,7 +95,7 @@ def main(itr):
 	foundRequestedDataset = False
 	while(1):
 		try:
-			iteration = readdata(fin,'Q')
+			iteration = readdata(fin,'L')
 			iteration = iteration[0]
 			print("Optimization iter. " + str(iteration) + " = dataset " + str(dataset) + ", you requested dataset " + str(itr))
 		except:
@@ -190,15 +190,44 @@ def readdata(fin,inpformat):
 def readHeader(fin):
 	#Should be called right after fin.open()
 	try:
-		nDom = readdata(fin,'Q')[0]
+		nDom = readdata(fin,'i')[0]
+		print("nDom =%d" % nDom)
 
-		tmp = readdata(fin,'Q'*nDom*4)
-		nPointsT = list(tmp[0:nDom])
-		nCellsT  = list(tmp[nDom:2*nDom])
-		nPFields = list(tmp[2*nDom:3*nDom]) 
-		nCFields = list(tmp[3*nDom:4*nDom])
+		# print("tmp =%d" % readdata(fin,'Q')[0:nDom*4])
 
-		nodesPerElement = readdata(fin,'Q')[0]
+		# nPointsT = list(tmp[0:nDom])
+		nPointsT = list(readdata(fin,'L')[0:nDom])
+		# nPointsT = readdata(fin,'Q')[0:nDom]
+		print("nPointsT =*%s" % nPointsT)
+
+		# nCellsT  = list(tmp[nDom:2*nDom])
+		# nCellsT = list(readdata(fin,'Q')[nDom:2*nDom])
+		# nCellsT = list(readdata(fin,'Q')[0])
+		nCellsT = list(readdata(fin,'L')[0:nDom])
+		print("nCellsT =*%s" % nCellsT)
+
+		# nPFields = list(tmp[2*nDom:3*nDom]) 
+		# nPFields = list(readdata(fin,'Q')[2*nDom:3*nDom])
+		# nPFields = list(readdata(fin,'Q')[0])
+		nPFields = list(readdata(fin,'i')[0:nDom])
+		print("nPFields =*%s" % nPFields)
+
+		# nCFields = list(tmp[3*nDom:4*nDom])
+		# nCFields = list(readdata(fin,'Q')[3*nDom:4*nDom])
+		# nCFields = list(readdata(fin,'Q')[0])
+		nCFields = list(readdata(fin,'i')[0:nDom])
+		print("nCFields =*%s" % nCFields)
+
+		nodesPerElement = readdata(fin,'i')[0]
+		print("nodesPerElement =%d" % nodesPerElement)
+
+	# nDom = 1
+	# nPointsT = [187425]
+	# nCellsT = [165888]
+	# nPFields = [3]
+	# nCFields = [9]
+	# nodesPerElement = 8
+
 	except:
 		exit("Could not read header format... exiting")
 
