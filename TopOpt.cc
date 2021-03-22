@@ -112,9 +112,9 @@ PetscErrorCode TopOpt::SetUp(){
 	PetscErrorCode ierr;
   
 	// SET DEFAULTS for FE mesh and levels for MG solver
-        nxyz[0] = 8+1;
-        nxyz[1] = 8+1;
-        nxyz[2] = 8+1;
+        nxyz[0] = 144+1;
+        nxyz[1] = 24+1;
+        nxyz[2] = 48+1;
         xc[0]   = 0.0;
         xc[1]   = 3.0;
         xc[2]   = 0.0;
@@ -127,7 +127,7 @@ PetscErrorCode TopOpt::SetUp(){
 	// SET DEFAULTS for optimization problems
 	volfrac= 0.25       ;  // Volume fraction on Dilated (it's scaled on the main file)
 	volfracREF= volfrac ;  // Volume fraction in Intermediate
-	maxItr = 2          ;  // Maximum number of iterations (check IterProj above: 40*9=360)
+	maxItr = 499        ;  // Maximum number of iterations (check IterProj above: 40*9=360)
 	rmin   = (3.0/(144.0)*1.01)*2.0 ; // Filter radius (it is not the minimum size radius)
 	Emin   = 1.0e-6     ; // 
 	Emax   = 1.0        ;
@@ -187,7 +187,7 @@ PetscErrorCode TopOpt::SetUpMESH(){
 	PetscOptionsGetReal(NULL,NULL,"-ycmax",&(xc[3]),&flg);
 	PetscOptionsGetReal(NULL,NULL,"-zcmin",&(xc[4]),&flg);
 	PetscOptionsGetReal(NULL,NULL,"-zcmax",&(xc[5]),&flg);
-   PetscOptionsGetReal(NULL,NULL,"-penal",&penal,&flg);
+    PetscOptionsGetReal(NULL,NULL,"-penal",&penal,&flg);
 	PetscOptionsGetInt(NULL,NULL,"-nlvls",&nlvls,&flg);
 
 	
@@ -195,11 +195,11 @@ PetscErrorCode TopOpt::SetUpMESH(){
 	PetscPrintf(PETSC_COMM_WORLD,"########################################################################\n");
 	PetscPrintf(PETSC_COMM_WORLD,"############################ FEM settings ##############################\n");
 	PetscPrintf(PETSC_COMM_WORLD,"# Number of nodes: (-nx,-ny,-nz):        (%i,%i,%i) \n",nxyz[0],nxyz[1],nxyz[2]);
-        PetscPrintf(PETSC_COMM_WORLD,"# Number of degree of freedom:           %i \n",3*nxyz[0]*nxyz[1]*nxyz[2]);
+    PetscPrintf(PETSC_COMM_WORLD,"# Number of degree of freedom:           %i \n",3*nxyz[0]*nxyz[1]*nxyz[2]);
 	PetscPrintf(PETSC_COMM_WORLD,"# Number of elements:                    (%i,%i,%i) \n",nxyz[0]-1,nxyz[1]-1,nxyz[2]-1);
 	PetscPrintf(PETSC_COMM_WORLD,"# Dimensions: (-xcmin,-xcmax,..,-zcmax): (%f,%f,%f)\n",xc[1]-xc[0],xc[3]-xc[2],xc[5]-xc[4]);
 	PetscPrintf(PETSC_COMM_WORLD,"# -nlvls: %i\n",nlvls);
-       	PetscPrintf(PETSC_COMM_WORLD,"########################################################################\n");
+    PetscPrintf(PETSC_COMM_WORLD,"########################################################################\n");
 
 	// Check if the mesh supports the chosen number of MG levels
 	PetscScalar divisor = PetscPowScalar(2.0,(PetscScalar)nlvls-1.0);
@@ -346,12 +346,12 @@ PetscErrorCode TopOpt::SetUpOPT(){
 	PetscOptionsGetReal(NULL,NULL,"-Emin",&Emin,&flg);
 	PetscOptionsGetReal(NULL,NULL,"-Emax",&Emax,&flg);
 	PetscOptionsGetReal(NULL,NULL,"-volfrac",&volfrac,&flg);
-   PetscOptionsGetReal(NULL,NULL,"-penal",&penal,&flg);
+    PetscOptionsGetReal(NULL,NULL,"-penal",&penal,&flg);
 	PetscOptionsGetReal(NULL,NULL,"-rmin",&rmin,&flg);
 	PetscOptionsGetInt(NULL,NULL,"-maxItr",&maxItr,&flg);
 	PetscOptionsGetInt(NULL,NULL,"-filter",&filter,&flg);
 	PetscOptionsGetReal(NULL,NULL,"-Xmin",&Xmin,&flg);
-        PetscOptionsGetReal(NULL,NULL,"-Xmax",&Xmax,&flg);
+    PetscOptionsGetReal(NULL,NULL,"-Xmax",&Xmax,&flg);
 	PetscOptionsGetReal(NULL,NULL,"-movlim",&movlim,&flg);
         
 	PetscPrintf(PETSC_COMM_WORLD,"################### Optimization settings ####################\n");
@@ -359,14 +359,14 @@ PetscErrorCode TopOpt::SetUpOPT(){
 	PetscPrintf(PETSC_COMM_WORLD,"# -filter: %i  (0=sens., 1=dens, 2=PDE)\n",filter);
 	PetscPrintf(PETSC_COMM_WORLD,"# -rmin: %f\n",rmin);
 	PetscPrintf(PETSC_COMM_WORLD,"# -volfrac: %f\n",volfrac);
-        PetscPrintf(PETSC_COMM_WORLD,"# -penal: %f\n",penal);
+    PetscPrintf(PETSC_COMM_WORLD,"# -penal: %f\n",penal);
 	PetscPrintf(PETSC_COMM_WORLD,"# -Emin/-Emax: %e - %e \n",Emin,Emax);
 	PetscPrintf(PETSC_COMM_WORLD,"# -maxItr: %i\n",maxItr);
 	PetscPrintf(PETSC_COMM_WORLD,"# -movlim: %f\n",movlim);
-       	PetscPrintf(PETSC_COMM_WORLD,"##############################################################\n");
+    PetscPrintf(PETSC_COMM_WORLD,"##############################################################\n");
 
-        // Allocate after input
-        gx = new PetscScalar[m];
+    // Allocate after input
+    gx = new PetscScalar[m];
 	if (filter==0){
 		Xmin = 0.001; // Prevent division by zero in filter
 	}
