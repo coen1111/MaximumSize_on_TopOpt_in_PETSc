@@ -87,12 +87,12 @@ def main(itr):
     while(1):
         try:
             iteration = readdata(fin,'L')[0]
-            print("Iteration: "+str(iteration))
+            # print("Iteration: "+str(iteration))
             print("Optimization iter. " + str(iteration) + " = dataset " + str(dataset) + ", you requested dataset " + str(itr))
         except:
             break #break loop
 
-        if int(dataset)==int(itr):  
+        if int(iteration)==int(itr):  
             foundRequestedDataset = True
             print("Processing dataset " + str(dataset))
 
