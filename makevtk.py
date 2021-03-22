@@ -11,22 +11,21 @@ def main():
     except:
         exit("Couldn't create file...")
 
-    writeHeader(fout,"Test file")
-    lP = [0, 0, 0, 2, 0, 0, 0, 0, 2, 1, 1, 1]
-    writePoints(fout,lP)
-    lConn =[0, 1, 2, 3]
-    lOffset = [4]
-    lTypes = [10]
-    writeCells(fout,lConn,lOffset,lTypes)
-    lldata = []
-    lldata.append(["Scalars",1,2,-1,0.5])
-    lldata.append(["OtherSet",1.0,2,3,127.3])
-    writeScalarPointData(fout,lldata)
-    lldata = []
-    lldata.append(["Scalars",1.0])
-    lldata.append(["Scalars2",27.0])
-    writeScalarCellData(fout,lldata)
-    writeFooter(fout)
+    # writeHeader(fout,"Test file")
+    # lP = [0, 0, 0, 2, 0, 0, 0, 0, 2, 1, 1, 1]
+    # writePoints(fout,lP)
+    # lConn =[0, 1, 2, 3]
+    # lOffset = [4]
+    # lTypes = [10]
+    # writeCells(fout,lConn,lOffset,lTypes)
+    # lldata = []
+    # lldata.append(["Scalars",1,2,-1,0.5])
+    # lldata.append(["OtherSet",1.0,2,3,127.3])
+    # writeScalarPointData(fout,lldata)
+    # lldata = []
+    # lldata.append(["Scalars",1.0])
+    # lldata.append(["Scalars2",27.0])
+    # writeScalarCellData(fout,lldata)
     fout.close()
 
 
@@ -75,17 +74,8 @@ def writeASCIICellsType(fout,nDom,nCellsT,cellsType):
     # Add an empty line after all the Cells Types
     fout.write("\n")
 
-    # Returns Int containing data size + data
-    # everything in base64 encoding
-def writeBin64(bindata):
-    datalen = st.pack('Q',len(bindata))
-    # Note that \n is removed from datalen
-    # - which btw is a ridiculous design choice
-    # as it makes the data size grow by 33% (4/3-1)
-    return ba.b2a_base64(datalen)[0:-1]+ba.b2a_base64(bindata)
-
 def writeASCIIScalarPointData(fout, nDom, nPointsT, pointFieldNames, pointData):
-    
+    # Write first rule; POINT_DATA, number of points
     fout.write("POINT_DATA "+str(nPointsT[0])+"\n")
     for d in range(len(pointFieldNames)):
         # SCALARS dataName dataType numComp
@@ -97,56 +87,8 @@ def writeASCIIScalarPointData(fout, nDom, nPointsT, pointFieldNames, pointData):
         # Add an empty line after a Scalar Point Data
         fout.write("\n")
 
-    
-
-
-    ##lldata = list of list of data (where 1st entry is set name)
-def writeScalarPointData(fout,lldata):
-    fout.write("\t\t<PointData Scalars=\"scalars\">\n")
-
-    for ldata in lldata:
-        setname = ldata[0]
-        del ldata [0]
-        data = ""
-        for number in ldata:
-            data += st.pack('f',number)
-        fout.write("\t\t\t<DataArray type=\"Float32\" Name=\"" + setname + "\" format=\"binary\">\n")
-        fout.write(writeBin64(data))
-        fout.write("\t\t\t</DataArray>\n")
-    
-    fout.write("\t\t</PointData>\n")
-
-
-def writeRawScalarPointData(fout,ldata,setnames):
-    fout.write("\t\t<PointData Scalars=\"scalars\">\n")
-
-    j=-1
-    for data in ldata:
-        j=j+1
-        fout.write("\t\t\t<DataArray type=\"Float32\" Name=\"" + setnames[j] + "\" format=\"binary\">\n")
-        fout.write(writeBin64(data))
-        fout.write("\t\t\t</DataArray>\n")
-    
-    fout.write("\t\t</PointData>\n")
-
-
-def writeScalarCellData(fout,lldata):
-    fout.write("\t\t<CellData Scalars=\"scalars\">\n")
-
-    for ldata in lldata:
-        setname = ldata[0]
-        del ldata [0]
-        data = ""
-        for number in ldata:
-            data += st.pack('f',number)
-        fout.write("\t\t\t<DataArray type=\"Float32\" Name=\"" + setname + "\" format=\"binary\">\n")
-        fout.write(writeBin64(data))
-        fout.write("\t\t\t</DataArray>\n")
-
-    fout.write("\t\t</CellData>\n")
-
 def writeASCIIScalarCellData(fout, nDom, nCellsT, cellFieldNames, cellData):
-    
+    # Write first rule; CELL_DATA, number of cells
     fout.write("CELL_DATA "+str(nCellsT[0])+"\n")
     for d in range(len(cellFieldNames)):
         # SCALARS dataName dataType numComp
@@ -158,18 +100,14 @@ def writeASCIIScalarCellData(fout, nDom, nCellsT, cellFieldNames, cellData):
         # Add an empty line after a Scalar Cell Data
         fout.write("\n")
 
-def writeRawScalarCellData(fout,ldata,setnames):
-    fout.write("\t\t<CellData Scalars=\"scalars\">\n")
-
-    j=-1
-    for data in ldata:
-        j=j+1
-        fout.write("\t\t\t<DataArray type=\"Float32\" Name=\"" + setnames[j] + "\" format=\"binary\">\n")
-        fout.write(writeBin64(data))
-        fout.write("\t\t\t</DataArray>\n")
-
-    fout.write("\t\t</CellData>\n")
-
+    # Returns Int containing data size + data
+    # everything in base64 encoding
+def writeBin64(bindata):
+    datalen = st.pack('Q',len(bindata))
+    # Note that \n is removed from datalen
+    # - which btw is a ridiculous design choice
+    # as it makes the data size grow by 33% (4/3-1)
+    return ba.b2a_base64(datalen)[0:-1]+ba.b2a_base64(bindata)
 
 if __name__ == "__main__":
     main()
