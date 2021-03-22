@@ -48,13 +48,7 @@ def main(itr):
     pointFieldNames = [x.strip() for x in pointFieldNames.split(',')]
     cellFieldNames = [x.strip() for x in cellFieldNames.split(',')] 
 
-    for i in range(len(pointFieldNames)):
-        print("pointFieldNames[i=%d] = %s" % (i, pointFieldNames[i]))
-
-    for i in range(len(cellFieldNames)):
-        print("cellFieldNames[i=%d] = %s" % (i, cellFieldNames[i]))
-
-    # Write VTK Header
+    # Write Header
     cvw.writeHeader(fout,title)
 
     print("Read/write mesh data: nodes")
@@ -87,8 +81,7 @@ def main(itr):
 
     print("Done writing mesh")
 
-
-    #Write out a vtk file for each time step or the requested dataset
+    #Write out a vtk file for the requested dataset
     dataset = 1
     foundRequestedDataset = False
     while(1):
@@ -102,64 +95,44 @@ def main(itr):
         if int(dataset)==int(itr):  
             foundRequestedDataset = True
             print("Processing dataset " + str(dataset))
-            # lPFieldNames = []
-            # lCFieldNames = []
-            # lrawPFields = [] # Can be commented
-            # lrawCFields = [] # Can be commented
 
             print("Read/write point/node data")
+            # Convert from binary to float and return in a matrix:
             pointData = readPointData(fin,nDom,nPointsT,pointFieldNames)
             cvw.writeASCIIScalarPointData(fout, nDom, nPointsT, pointFieldNames, pointData)
+            pointData = None # delete from memory
 
             print("Read/write cell/mesh data")
+            # Convert from binary to float and return in a matrix:
             cellData = readCellData(fin,nDom,nCellsT,cellFieldNames)
             cvw.writeASCIIScalarCellData(fout, nDom, nCellsT, cellFieldNames, cellData)
+            cellData = None # delete from memory
 
-            # for j in range(nPFields[i]):
-            #     lrawPFields.append("")
-            # for j in range(nCFields[i]):
-            #     lrawCFields.append("")
-
-            # for i in range(nDom):
-                # for j in range(nPFields[i]):
-                #     if(i==0):
-                #         try:
-                #             lPFieldNames.append(pointFieldNames[j])
-                #         except:
-                #             lPFieldNames.append("Point Field " + str(j))
-                #     #Multiply by 4 == length of float32
-                #     lrawPFields[j] += fin.read(4*nPointsT[i])
-
-                # for j in range(nCFields[i]):
-                #     if(i==0):
-                #         try:
-                #             lCFieldNames.append(cellFieldNames[j])
-                #         except:
-                #             lCFieldNames.append("Cell Field " + str(j))
-                #     #Multiply by 4 == length of float32
-                #     lrawCFields[j] += fin.read(4*nCellsT[i])
-            # cvw.writeRawScalarPointData(fout,lrawPFields,lPFieldNames)
-            # cvw.writeRawScalarCellData(fout,lrawCFields,lCFieldNames)
-
+            # Close output file
             fout.close()
         else:
             tmp1 = 0
             for i in range(nDom):
                 for j in range(nPFields[i]):
                     #fin.read(4*nPointsT[i])
+                    # Determine offset, which can be skipped through the binary values, a float has a length of 4 bytes
                     tmp1 += 4*nPointsT[i]
                 for j in range(nCFields[i]):
                     #fin.read(4*nCellsT[i])
+                    # Determine offset, which can be skipped through the binary values, a float has a length of 4 bytes
                     tmp1 += 4*nCellsT[i]
+            # Set offset in file
             fin.seek(tmp1,1)
         dataset += 1
 
+    # Close input file
     fin.close()
+
     if foundRequestedDataset:
         print("Done")
     else:
         print("!! The requested dataset was NOT found!! ")
-        # subprocess.call("rm " + FOUT + "*.vtk", shell=True);
+        subprocess.call("rm " + FOUT + "*.vtk", shell=True);
 
 def getNoNodes(i):
     if(i==10):
@@ -176,7 +149,6 @@ def convertToVtkCell(i):
     if(i==1000):
         return 12
     return i
-
 
 def readdata(fin,inpformat):
     # fin = file input
@@ -202,13 +174,14 @@ def readInString(fin):
     # Reads in a string until an end line symbol is detected
     string = ''
     while(1):
-        # try:
-        tmp = readdata(fin,"c")[0] # The c means data of character type (length 1)
+        try:
+            tmp = readdata(fin,"c")[0] # The c means data of character type (length 1)
         # print("readInString: tmp=",tmp)
         # print("readInString: type(tmp)=",type(tmp))
-        string += tmp
-        # except:
-             # exit("File ended while scanning for string. String not present or properly terminated?... exiting")
+            string += tmp
+        except:
+            exit("File ended while scanning for string. String not present or properly terminated?... exiting")
+        
         # Break if end character detected
         if(tmp == '\x01'):
             string = string[0:-1]; # Dont want to save last character
@@ -220,41 +193,16 @@ def readHeader(fin):
     try:
         nDom = readdata(fin,'i')[0]
         # print("nDom =%d" % nDom)
-
-        # print("tmp =%d" % readdata(fin,'Q')[0:nDom*4])
-
-        # nPointsT = list(tmp[0:nDom])
         nPointsT = list(readdata(fin,'L')[0:nDom])
-        # nPointsT = readdata(fin,'Q')[0:nDom]
         # print("nPointsT =*%s" % nPointsT)
-
-        # nCellsT  = list(tmp[nDom:2*nDom])
-        # nCellsT = list(readdata(fin,'Q')[nDom:2*nDom])
-        # nCellsT = list(readdata(fin,'Q')[0])
         nCellsT = list(readdata(fin,'L')[0:nDom])
         # print("nCellsT =*%s" % nCellsT)
-
-        # nPFields = list(tmp[2*nDom:3*nDom]) 
-        # nPFields = list(readdata(fin,'Q')[2*nDom:3*nDom])
-        # nPFields = list(readdata(fin,'Q')[0])
         nPFields = list(readdata(fin,'i')[0:nDom])
         # print("nPFields =*%s" % nPFields)
-
-        # nCFields = list(tmp[3*nDom:4*nDom])
-        # nCFields = list(readdata(fin,'Q')[3*nDom:4*nDom])
-        # nCFields = list(readdata(fin,'Q')[0])
         nCFields = list(readdata(fin,'i')[0:nDom])
         # print("nCFields =*%s" % nCFields)
-
         nodesPerElement = readdata(fin,'i')[0]
         # print("nodesPerElement =%d" % nodesPerElement)
-
-    # nDom = 1
-    # nPointsT = [187425]
-    # nCellsT = [165888]
-    # nPFields = [3]
-    # nCFields = [9]
-    # nodesPerElement = 8
 
     except:
         exit("Could not read header format... exiting")
@@ -342,10 +290,10 @@ def readPointData(fin,nDom,nPointsT,pointFieldNames):
         # Rows: pointData, starting from 0
         # Cols: scalarData1, scalarData2, ..., len(pointFieldNames)
         for d in range(len(pointFieldNames)):
-            print("pointFieldNames[d=%s]=%s" % (d, pointFieldNames[d]))
+            # print("pointFieldNames[d=%s]=%s" % (d, pointFieldNames[d]))
             for p in range(nPointsT[0]):
                 pointData[p][d] = readdata(fin,'f')[0]
-                print("pointData[p=%s]=%s" % (p, pointData[p][d]))
+                # print("pointData[p=%s]=%s" % (p, pointData[p][d]))
 
     except:
          exit("Could not read Point Data... exiting")
@@ -353,24 +301,24 @@ def readPointData(fin,nDom,nPointsT,pointFieldNames):
     return pointData
 
 def readCellData(fin,nDom,nCellsT,cellFieldNames):
-    # try:
+    try:
         #Also loop over i?
         # for i in range(nDom):
 
         # Assign memory
-    cellData = np.zeros((nCellsT[0],len(cellFieldNames)))
+        cellData = np.zeros((nCellsT[0],len(cellFieldNames)))
 
         # Read the points
         # Rows: cellData, starting from 0
         # Cols: scalarData1, scalarData2, ..., len(cellFieldNames)
-    for d in range(len(cellFieldNames)):
-        print("cellFieldNames[d=%s]=%s" % (d, cellFieldNames[d]))
-        for c in range(nCellsT[0]):
-            cellData[c][d] = readdata(fin,'f')[0]
-            print("cellData[c=%s]=%s" % (c, cellData[c][d]))
+        for d in range(len(cellFieldNames)):
+            # print("cellFieldNames[d=%s]=%s" % (d, cellFieldNames[d]))
+            for c in range(nCellsT[0]):
+                cellData[c][d] = readdata(fin,'f')[0]
+                # print("cellData[c=%s]=%s" % (c, cellData[c][d]))
 
-    # except:
-    #      exit("Could not read Cell Data... exiting")
+    except:
+          exit("Could not read Cell Data... exiting")
 
     return cellData
 
