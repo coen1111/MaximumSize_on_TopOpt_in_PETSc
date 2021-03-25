@@ -74,9 +74,11 @@ def writeASCIICellsType(fout,nDom,nCellsT,cellsType):
     # Add an empty line after all the Cells Types
     fout.write("\n")
 
-def writeASCIIScalarPointData(fout, nDom, nPointsT, pointFieldNames, pointData):
+def writeASCIIHeaderPointData(fout, nDom, nPointsT):
     # Write first rule; POINT_DATA, number of points
     fout.write("POINT_DATA "+str(nPointsT[0])+"\n")
+
+def writeASCIIScalarPointData(fout, nDom, nPointsT, pointFieldNames, pointData):
     for d in range(len(pointFieldNames)):
         # SCALARS dataName dataType numComp
         fout.write("SCALARS "+str(pointFieldNames[d])+ " float 1\n")
@@ -87,9 +89,23 @@ def writeASCIIScalarPointData(fout, nDom, nPointsT, pointFieldNames, pointData):
         # Add an empty line after a Scalar Point Data
         fout.write("\n")
 
-def writeASCIIScalarCellData(fout, nDom, nCellsT, cellFieldNames, cellData):
+def writeASCIIVectorsPointData(fout, nDom, nPointsT, vectorFieldNames, vectorData):
+    for v in range(len(vectorFieldNames)):
+        # VECTORS dataName dataType
+        fout.write("VECTORS "+str(vectorFieldNames[v])+ " float\n")
+        for p in range(nPointsT[0]):
+            for d in range(len(vectorData[v][p])):
+                fout.write("{:.5e} ".format(vectorData[v][p][d])) # Format in float, scientific notation
+            fout.write("\n") # Set to next line
+
+        # Add an empty line after a Vector Point Data
+        fout.write("\n")
+
+def writeASCIIHeaderCellData(fout, nDom, nCellsT):
     # Write first rule; CELL_DATA, number of cells
     fout.write("CELL_DATA "+str(nCellsT[0])+"\n")
+
+def writeASCIIScalarCellData(fout, nDom, nCellsT, cellFieldNames, cellData):
     for d in range(len(cellFieldNames)):
         # SCALARS dataName dataType numComp
         fout.write("SCALARS "+str(cellFieldNames[d])+ " float 1\n")

@@ -57,7 +57,7 @@ def main(itr):
     nDim = 3
     # Convert from binary to float and return in a matrix:
     points = readPoints(fin,nDom,nPointsT,nDim)
-    cvw.writeASCIIPoints(fout,nDom,nPointsT,nDim,points)
+    cvw.writeASCIIPoints(fout,nDom,nPointsT,nDim,points)  
     points = None # delete from memory
 
     print("Read/write mesh data: element connectivity")
@@ -97,12 +97,22 @@ def main(itr):
             print("Processing dataset " + str(dataset))
 
             print("Read/write point/node data")
+            cvw.writeASCIIHeaderPointData(fout, nDom, nPointsT)
+
             # Convert from binary to float and return in a matrix:
             pointData = readPointData(fin,nDom,nPointsT,pointFieldNames)
             cvw.writeASCIIScalarPointData(fout, nDom, nPointsT, pointFieldNames, pointData)
+
+            # In this case the pointData is ux, uy, uz also write in a vector
+            vectorFieldNames = ["Displacements"]
+            vectorData = [pointData]
+            cvw.writeASCIIVectorsPointData(fout, nDom, nPointsT, vectorFieldNames, vectorData)
+            vectorData = None # delete from memory
             pointData = None # delete from memory
 
             print("Read/write cell/mesh data")
+            cvw.writeASCIIHeaderCellData(fout, nDom, nCellsT)
+
             # Convert from binary to float and return in a matrix:
             cellData = readCellData(fin,nDom,nCellsT,cellFieldNames)
             cvw.writeASCIIScalarCellData(fout, nDom, nCellsT, cellFieldNames, cellData)
