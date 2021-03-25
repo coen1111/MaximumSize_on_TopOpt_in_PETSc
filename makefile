@@ -1,5 +1,5 @@
-PETSC_DIR=/home/pi/petsc
-PETSC_ARCH=arch-linux-c-debug
+PETSC_DIR=/home/pi/petsc-3.7.4
+PETSC_ARCH=arch-linux2-c-debug
 CFLAGS = -I.
 FFLAGS=
 CPPFLAGS=-I.
@@ -23,5 +23,5 @@ topopt: main.o TopOpt.o LinearElasticity.o MMA.o Filter.o PDEFilter.o MPIIO.o ch
 	rm -rf *.o
 
 myclean:
-	rm -rf topopt *.o output* binary* log* makevtu.pyc Restart* 
+	rm -rf topopt *.o output* binary* log* makevtk.pyc Restart* 
 
